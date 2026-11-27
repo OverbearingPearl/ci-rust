@@ -21,4 +21,6 @@ fi
 if ci_have cargo-nextest; then
     exec cargo nextest run "${SELECT[@]}" --manifest-path "$ROOT/Cargo.toml"
 fi
-exec cargo test "${SELECT[@]}" --manifest-path "$ROOT/Cargo.toml"
+# Every failure at once. A run that stops at the first red suite hides the
+# rest, and on a slow platform each hidden failure costs another whole run.
+exec cargo test "${SELECT[@]}" --no-fail-fast --manifest-path "$ROOT/Cargo.toml"
